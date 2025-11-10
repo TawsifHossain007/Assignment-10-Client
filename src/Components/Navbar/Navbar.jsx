@@ -1,16 +1,15 @@
-import React, { useEffect, useState } from "react";
-import { NavLink } from "react-router";
+import React, { useContext, useEffect } from "react";
+import { Link, NavLink } from "react-router";
 import { Sun, Moon } from "lucide-react";
+import { ThemeContext } from "../ThemeContext/ThemeContext";
 
 const Navbar = () => {
-  const [theme, setTheme] = useState("light");
+    const { theme, toggleTheme } = useContext(ThemeContext);
 
   useEffect(() => {
     document.documentElement.setAttribute("data-theme", theme);
     localStorage.setItem("theme", theme);
   }, [theme]);
-
-  const toggleTheme = () => setTheme(theme === "light" ? "dark" : "light");
 
   const links = (
     <>
@@ -21,7 +20,7 @@ const Navbar = () => {
   );
 
   return (
-    <div className="navbar bg-base-100 shadow-sm">
+    <div className="navbar shadow-md backdrop-blur-md border-b border-base-300 w-11/12 mx-auto">
       <div className="navbar-start">
         <div className="dropdown">
           <div tabIndex={0} role="button" className="btn btn-ghost lg:hidden">
@@ -33,7 +32,7 @@ const Navbar = () => {
             {links}
           </ul>
         </div>
-        <a className="btn btn-ghost text-xl">MovieHub</a>
+        <Link to={"/"} className="text-xl font-heading font-bold text-primary">MovieHub</Link>
       </div>
 
       <div className="navbar-center hidden lg:flex">
@@ -45,7 +44,8 @@ const Navbar = () => {
         <button onClick={toggleTheme} className="btn btn-ghost">
           {theme === "light" ? <Moon size={20} /> : <Sun size={20} />}
         </button>
-        <button className="btn ml-0 md:ml-5">Login</button>
+        <Link to={"/auth/login"} className="btn btn-primary text-white ml-0 md:ml-5">Login</Link>
+        <Link to={"/auth/register"} className="btn btn-primary text-white ml-0 md:ml-2">Register</Link>
       </div>
     </div>
   );

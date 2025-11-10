@@ -7,6 +7,10 @@ import Root from './Layout/Root';
 import Home from './Pages/Home';
 import AllMovies from './Pages/AllMovies';
 import MyCollection from './Pages/MyCollection';
+import Login from './Components/Login/Login';
+import Register from './Components/Register/Register';
+import AuthRoot from './Layout/AuthRoot';
+import { ThemeProvider } from './Components/ThemeContext/ThemeContext';
 
 const router = createBrowserRouter([
   {
@@ -28,10 +32,26 @@ const router = createBrowserRouter([
       }
     ]
   },
+  {
+    path: "/auth",
+    Component: AuthRoot,
+    children: [
+      {
+        path: "/auth/login",
+        Component: Login,
+      },
+      {
+        path: "/auth/register",
+        Component: Register,
+      },
+    ]
+  }
 ]);
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <RouterProvider router={router} />
+    <ThemeProvider>
+          <RouterProvider router={router} />
+    </ThemeProvider>
   </StrictMode>,
 )
