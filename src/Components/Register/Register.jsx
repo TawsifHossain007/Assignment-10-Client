@@ -1,9 +1,82 @@
 import { Eye, EyeOff } from "lucide-react";
-import React, { useState } from "react";
-import { Link } from "react-router";
+import React, { use, useState } from "react";
+import { Link, useNavigate } from "react-router";
+import { AuthContext } from "../../AuthProvider/AuthProvider";
+import Swal from "sweetalert2";
 
 const Register = () => {
   const [showPassword, setShowPassword] = useState(false);
+  const [error, setError] = useState("");
+  const navigate = useNavigate();
+
+  const { createUser, setUser, handleGoogleSignIn, updateUser } =
+    use(AuthContext);
+
+  const handleSubmit = (e) => {
+    e.preventDefault()
+
+    const form = e.target;
+    const name = form.name.value;
+    const photoURL = form.PhotoURL.value;
+    const email = form.email.value;
+    const password = form.password.value;
+
+    if (!/[A-Z]/.test(password)) {
+      setError("Password must contain at least one uppercase letter");
+      return;
+    }
+    if (!/[a-z]/.test(password)) {
+      setError("Password must contain at least one lowercase letter");
+      return;
+    }
+    if (password.length < 6) {
+      setError("Password must be at least 6 characters long");
+      return;
+    }
+
+    createUser(email, password)
+      .then((res) => {
+        const user = res.user;
+        updateUser({ displayName: name, photoURL: photoURL })
+          .then(() => {
+            setUser({ ...user, displayName: name, photoURL: photoURL });
+            Swal.fire({
+              position: "center",
+              icon: "success",
+              title: "Registration Successful",
+              showConfirmButton: false,
+              timer: 1500,
+            });
+             navigate("/");
+            form.reset();
+           
+          })
+          .catch((err) => {
+            setError(err.code);
+            setUser(user);
+          });
+      })
+      .catch((err) => {
+        setError(err.code);
+      });
+  };
+
+  const handleGoogle = () => {
+      handleGoogleSignIn().then(() => {
+        Swal.fire({
+          position: "center",
+          icon: "success",
+          title: "Logged In Successfully",
+          showConfirmButton: false,
+          timer: 1500,
+        });
+        navigate("/");
+      })
+      .catch((err) => {
+          console.log(err);
+          setError(err.code);
+        });
+    };
 
   const handleTogglePasswordShow = (event) => {
     event.preventDefault();
@@ -16,7 +89,7 @@ const Register = () => {
         Please Register
       </h1>
       <div className="card-body">
-        <form className="fieldset">
+        <form onSubmit={handleSubmit} className="fieldset">
           <label className="label">Name</label>
           <input
             required
@@ -42,6 +115,8 @@ const Register = () => {
             placeholder="Email"
           />
           <label className="label">Password</label>
+
+           {error && <p className="text-red-600 font-medium">!!! {error}</p>}
           <div className="relative">
             <input
               type={showPassword ? "text" : "password"}
@@ -74,6 +149,7 @@ const Register = () => {
 
           {/* Google Sign-In */}
           <button
+          onClick={handleGoogle}
             type="button"
             className="btn border border-blue-200 bg-white hover:bg-gray-200 text-black"
           >
