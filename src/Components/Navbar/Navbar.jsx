@@ -9,21 +9,20 @@ const Navbar = () => {
   const { user, logout } = use(AuthContext);
   const { theme, toggleTheme } = useContext(ThemeContext);
 
-   console.log(user)
-
   const handleLogout = () => {
-    logout().then(() => {
-      Swal.fire({
-        position: "center",
-        icon: "success",
-        title: "Logged Out Successfully",
-        showConfirmButton: false,
-        timer: 1500,
+    logout()
+      .then(() => {
+        Swal.fire({
+          position: "center",
+          icon: "success",
+          title: "Logged Out Successfully",
+          showConfirmButton: false,
+          timer: 1500,
+        });
+      })
+      .catch((err) => {
+        console.log(err);
       });
-    })
-    .catch((err)=>{
-      console.log(err)
-    })
   };
 
   useEffect(() => {
@@ -39,9 +38,11 @@ const Navbar = () => {
       <li>
         <NavLink to="/allMovies">All Movies</NavLink>
       </li>
-      <li>
-        <NavLink to="/myCollection">My Collection</NavLink>
-      </li>
+      {user && (
+        <li>
+          <NavLink to="/myCollection">My Collection</NavLink>
+        </li>
+      )}
     </>
   );
 
@@ -87,63 +88,62 @@ const Navbar = () => {
           {theme === "light" ? <Moon size={20} /> : <Sun size={20} />}
         </button>
 
-       {user && (
-  <div className="dropdown dropdown-end">
-    <div
-      tabIndex={0}
-      role="button"
-      className="btn btn-ghost btn-circle avatar"
-    >
-      <div className="w-10 rounded-full ring ring-primary ring-offset-base-100 ring-offset-2">
-        <img src={user.photoURL} alt="User Avatar" />
-      </div>
-    </div>
+        {user && (
+          <div className="dropdown dropdown-end">
+            <div
+              tabIndex={0}
+              role="button"
+              className="btn btn-ghost btn-circle avatar"
+            >
+              <div className="w-10 rounded-full ring ring-primary ring-offset-base-100 ring-offset-2">
+                <img src={user.photoURL} alt="User Avatar" />
+              </div>
+            </div>
 
-    {/* Dropdown Card */}
-    <ul
-      tabIndex={0}
-      className="dropdown-content z-[999] menu p-4 shadow-lg bg-base-100 rounded-xl w-72 
+            {/* Dropdown Card */}
+            <ul
+              tabIndex={0}
+              className="dropdown-content z-[999] menu p-4 shadow-lg bg-base-100 rounded-xl w-72 
                  backdrop-blur-lg border border-base-300"
-    >
-      <li className="text-center flex flex-col items-center">
-        {/* ✅ User photo INSIDE the dropdown */}
-        <img
-          src={user.photoURL}
-          className="w-24 h-24 rounded-full ring ring-primary ring-offset-base-200 ring-offset-2 mb-2"
-          alt="User"
-        />
+            >
+              <li className="text-center flex flex-col items-center">
+                {/* ✅ User photo INSIDE the dropdown */}
+                <img
+                  src={user.photoURL}
+                  className="w-24 h-24 rounded-full ring ring-primary ring-offset-base-200 ring-offset-2 mb-2"
+                  alt="User"
+                />
 
-        {/* User Name */}
-        <h3 className="font-bold text-lg">{user.displayName}</h3>
+                {/* User Name */}
+                <h3 className="font-bold text-lg">{user.displayName}</h3>
 
-        {/* User Email */}
-        <p className="text-sm opacity-70">{user.email}</p>
-      </li>
+                {/* User Email */}
+                <p className="text-sm opacity-70">{user.email}</p>
+              </li>
 
-      <div className="divider"></div>
-      <li>
-        <button
-          className="btn btn-primary w-full text-white"
-          onClick={handleLogout}
-        >
-          Logout
-        </button>
-      </li>
-    </ul>
-  </div>
-)}
-
+              <div className="divider"></div>
+              <li>
+                <button
+                  className="btn btn-primary w-full text-white"
+                  onClick={handleLogout}
+                >
+                  Logout
+                </button>
+              </li>
+            </ul>
+          </div>
+        )}
 
         {user ? (
-          <button onClick={handleLogout} className="btn btn-primary text-white ml-0 md:ml-5">
+          <button
+            onClick={handleLogout}
+            className="btn btn-primary text-white ml-0 md:ml-5"
+          >
             Logout
           </button>
         ) : (
           <div className="flex items-center justify-center gap-2 md:gap-4">
-            <Link
-              to={"/auth/login"}
-              className="btn btn-primary text-white"
-            >
+            <Link to={"/auth/login"} className="btn btn-primary text-white">
               Login
             </Link>
             <Link

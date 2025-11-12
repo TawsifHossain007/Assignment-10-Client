@@ -13,6 +13,7 @@ import AuthRoot from "./Layout/AuthRoot";
 import { ThemeProvider } from "./Components/ThemeContext/ThemeContext";
 import AuthProvider from "./AuthProvider/AuthProvider";
 import ErrorApps from "./Components/ErrorPage/ErrorPage";
+import MovieDetails from "./Components/MovieDetails/MovieDetails";
 
 const router = createBrowserRouter([
   {
@@ -33,6 +34,10 @@ const router = createBrowserRouter([
         path: "/myCollection",
         Component: MyCollection,
       },
+      {
+        path: "movieDetails",
+        Component: MovieDetails
+      }
     ],
   },
   {
