@@ -1,12 +1,13 @@
-import React, { use, useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { AuthContext } from "../AuthProvider/AuthProvider";
 import Swal from "sweetalert2";
 import axios from "axios";
 import Loading from "../Components/Loading/Loading";
+import { motion } from "framer-motion";
 
 const MyWishlist = () => {
   const [collection, setCollection] = useState([]);
-  const { user } = use(AuthContext);
+  const { user } = useContext(AuthContext);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -59,8 +60,26 @@ const MyWishlist = () => {
     );
   }
 
+  const pageVariants = {
+    initial: { opacity: 0, y: 20 },
+    animate: { opacity: 1, y: 0 },
+    exit: { opacity: 0, y: -20 },
+  };
+
+  const pageTransition = {
+    duration: 0.6,
+    ease: "easeOut"
+  };
+
   return (
-    <div className="bg-base-100 min-h-screen">
+    <motion.div
+      className="bg-base-100 min-h-screen"
+      initial="initial"
+      animate="animate"
+      exit="exit"
+      variants={pageVariants}
+      transition={pageTransition}
+    >
       <div className="w-11/12 mx-auto">
         <div className="overflow-x-auto">
           <table className="table">
@@ -95,7 +114,7 @@ const MyWishlist = () => {
                   <td>
                     {singleCol.director}
                     <br />
-                    <span className="badge badge-ghost badge-sm">
+                    <span className="badge badge-ghost badge-sm hidden md:block">
                       {singleCol.genre}
                     </span>
                   </td>
@@ -114,7 +133,7 @@ const MyWishlist = () => {
           </table>
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 };
 

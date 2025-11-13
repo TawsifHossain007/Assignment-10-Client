@@ -2,6 +2,7 @@ import React, { useContext } from "react";
 import Swal from "sweetalert2";
 import axios from "axios";
 import { AuthContext } from "../../AuthProvider/AuthProvider";
+import { motion } from "framer-motion";
 
 const AddMovie = () => {
   const { user } = useContext(AuthContext);
@@ -48,8 +49,26 @@ const AddMovie = () => {
     }
   };
 
+  const pageVariants = {
+    initial: { opacity: 0, y: 20 },
+    animate: { opacity: 1, y: 0 },
+    exit: { opacity: 0, y: -20 },
+  };
+
+  const pageTransition = {
+    duration: 0.6,
+    ease: "easeOut"
+  };
+
   return (
-    <div className="max-w-2xl mx-auto p-6 bg-base-200 rounded-xl shadow-lg mt-10 mb-20">
+    <motion.div
+      className="max-w-2xl mx-auto p-6 bg-base-200 rounded-xl shadow-lg mt-10 mb-20"
+      initial="initial"
+      animate="animate"
+      exit="exit"
+      variants={pageVariants}
+      transition={pageTransition}
+    >
       <h2 className="text-2xl font-bold text-center mb-5">Add a New Movie</h2>
 
       <form onSubmit={handleAddMovie} className="space-y-4">
@@ -145,7 +164,7 @@ const AddMovie = () => {
           Add Movie
         </button>
       </form>
-    </div>
+    </motion.div>
   );
 };
 
