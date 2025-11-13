@@ -42,7 +42,7 @@ const AddMovie = () => {
       console.error("Error adding movie:", error);
       Swal.fire({
         title: "Error!",
-        text: "Failed to add movie. Please try again.",
+        text: "Failed to add movie. Please try again",
         icon: "error",
         confirmButtonText: "OK",
       });
