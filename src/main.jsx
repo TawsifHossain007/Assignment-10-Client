@@ -39,7 +39,7 @@ const router = createBrowserRouter([
         Component: MyWishlist,
       },
       {
-        path: "movieDetails/:id",
+        path: "/movieDetails/:id",
         Component: MovieDetails
       },
       {
