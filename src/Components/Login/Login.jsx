@@ -2,59 +2,72 @@ import React, { use, useState } from "react";
 import { Link, useNavigate } from "react-router";
 import { AuthContext } from "../../AuthProvider/AuthProvider";
 import Swal from "sweetalert2";
+import { motion } from "framer-motion";
 
 const Login = () => {
   const [error, setError] = useState("");
   const navigate = useNavigate();
 
-  const { handleGoogleSignIn,signIn } = use(AuthContext);
+  const { handleGoogleSignIn, signIn } = use(AuthContext);
 
   const handleGoogle = () => {
-    handleGoogleSignIn().then(() => {
-      Swal.fire({
-        position: "center",
-        icon: "success",
-        title: "Logged In Successfully",
-        showConfirmButton: false,
-        timer: 1500,
-      });
-      navigate("/");
-    })
-    .catch((err) => {
+    handleGoogleSignIn()
+      .then(() => {
+        Swal.fire({
+          position: "center",
+          icon: "success",
+          title: "Logged In Successfully",
+          showConfirmButton: false,
+          timer: 1500,
+        });
+        navigate("/");
+      })
+      .catch((err) => {
         console.log(err);
         setError(err.code);
       });
   };
 
-  const handleSubmit = (e) =>{
-    e.preventDefault()
+  const handleSubmit = (e) => {
+    e.preventDefault();
     const form = e.target;
     const email = form.email.value;
     const password = form.password.value;
 
-    signIn(email,password)
-    .then(() => {
-      Swal.fire({
-        position: "center",
-        icon: "success",
-        title: "Logged In Successfully",
-        showConfirmButton: false,
-        timer: 1500,
-      });
-      navigate("/");
-      form.reset()
-    })
-        .catch((err) => {
+    signIn(email, password)
+      .then(() => {
+        Swal.fire({
+          position: "center",
+          icon: "success",
+          title: "Logged In Successfully",
+          showConfirmButton: false,
+          timer: 1500,
+        });
+        navigate("/");
+        form.reset();
+      })
+      .catch((err) => {
         console.log(err);
         setError(err.code);
       });
-  }
+  };
 
   return (
-    <div className="card bg-[#2563EB] w-full max-w-sm shrink-0 shadow-2xl">
+    <motion.div
+      className="card bg-[#2563EB] w-full max-w-sm shrink-0 shadow-2xl mx-auto mt-20"
+      initial={{ opacity: 0, y: 60 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{
+        duration: 0.8,
+        ease: "easeOut",
+        type: "spring",
+        stiffness: 60,
+      }}
+    >
       <h1 className="text-center font-semibold text-[25px] text-white pt-4">
         Please Login
       </h1>
+
       <form onSubmit={handleSubmit} className="card-body">
         <fieldset className="fieldset">
           {/* Email */}
@@ -81,7 +94,7 @@ const Login = () => {
             <button className="link link-hover">Forgot password?</button>
           </div>
 
-           {error && <p className="text-red-600 font-medium">!!! {error}</p>}
+          {error && <p className="text-red-600 font-medium">!!! {error}</p>}
 
           <button
             type="submit"
@@ -135,7 +148,7 @@ const Login = () => {
           </p>
         </fieldset>
       </form>
-    </div>
+    </motion.div>
   );
 };
 

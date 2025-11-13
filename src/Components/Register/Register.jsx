@@ -3,6 +3,7 @@ import React, { use, useState } from "react";
 import { Link, useNavigate } from "react-router";
 import { AuthContext } from "../../AuthProvider/AuthProvider";
 import Swal from "sweetalert2";
+import { motion } from "framer-motion";
 
 const Register = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -13,7 +14,7 @@ const Register = () => {
     use(AuthContext);
 
   const handleSubmit = (e) => {
-    e.preventDefault()
+    e.preventDefault();
 
     const form = e.target;
     const name = form.name.value;
@@ -47,9 +48,8 @@ const Register = () => {
               showConfirmButton: false,
               timer: 1500,
             });
-             navigate("/");
+            navigate("/");
             form.reset();
-           
           })
           .catch((err) => {
             setError(err.code);
@@ -62,7 +62,8 @@ const Register = () => {
   };
 
   const handleGoogle = () => {
-      handleGoogleSignIn().then(() => {
+    handleGoogleSignIn()
+      .then(() => {
         Swal.fire({
           position: "center",
           icon: "success",
@@ -73,10 +74,10 @@ const Register = () => {
         navigate("/");
       })
       .catch((err) => {
-          console.log(err);
-          setError(err.code);
-        });
-    };
+        console.log(err);
+        setError(err.code);
+      });
+  };
 
   const handleTogglePasswordShow = (event) => {
     event.preventDefault();
@@ -84,7 +85,17 @@ const Register = () => {
   };
 
   return (
-    <div className="card bg-[#2563EB] w-full max-w-sm shrink-0 shadow-2xl">
+    <motion.div
+      className="card bg-[#2563EB] w-full max-w-sm shrink-0 shadow-2xl mx-auto mt-20"
+      initial={{ opacity: 0, y: 60 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{
+        duration: 0.8,
+        ease: "easeOut",
+        type: "spring",
+        stiffness: 60,
+      }}
+    >
       <h1 className="text-center font-semibold text-[25px] pt-4 text-white">
         Please Register
       </h1>
@@ -98,6 +109,7 @@ const Register = () => {
             className="input bg-white text-black dark:bg-gray-700 dark:text-white"
             placeholder="Name"
           />
+
           <label className="label">Photo URL</label>
           <input
             required
@@ -106,6 +118,7 @@ const Register = () => {
             className="input bg-white text-black dark:bg-gray-700 dark:text-white"
             placeholder="Photo URL"
           />
+
           <label className="label">Email</label>
           <input
             required
@@ -114,9 +127,11 @@ const Register = () => {
             className="input bg-white text-black dark:bg-gray-700 dark:text-white"
             placeholder="Email"
           />
+
           <label className="label">Password</label>
 
-           {error && <p className="text-red-600 font-medium">!!! {error}</p>}
+          {error && <p className="text-red-600 font-medium">!!! {error}</p>}
+
           <div className="relative">
             <input
               type={showPassword ? "text" : "password"}
@@ -128,16 +143,17 @@ const Register = () => {
               onClick={handleTogglePasswordShow}
               className="btn btn-xs top-2 right-5 absolute"
             >
-              {showPassword ? <Eye></Eye> : <EyeOff></EyeOff>}
+              {showPassword ? <Eye /> : <EyeOff />}
             </button>
           </div>
-          <div></div>
+
           <button
             type="submit"
             className="btn bg-white hover:bg-[#ffffffb0] text-[#2563EB] mt-4"
           >
             Register
           </button>
+
           <p className="text-[15px] text-center mt-2 font-medium">
             Already have an account?{" "}
             <Link to={"/auth/login"} className="text-black">
@@ -149,7 +165,7 @@ const Register = () => {
 
           {/* Google Sign-In */}
           <button
-          onClick={handleGoogle}
+            onClick={handleGoogle}
             type="button"
             className="btn border border-blue-200 bg-white hover:bg-gray-200 text-black"
           >
@@ -184,7 +200,7 @@ const Register = () => {
           </button>
         </form>
       </div>
-    </div>
+    </motion.div>
   );
 };
 
