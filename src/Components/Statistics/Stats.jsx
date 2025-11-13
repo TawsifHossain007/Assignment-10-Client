@@ -50,7 +50,7 @@ const Stats = () => {
         </div>
         <div>
           <h1 className="p-10 bg-gradient-to-br from-[#05e9e9] via-[#09e8b4fd] to-[#2005ee] rounded-2xl text-white py-20 font-semibold text-4xl md:text-5xl">
-            Total Users: {stats.length}
+            Total Users: 13
           </h1>
         </div>
       </div>
